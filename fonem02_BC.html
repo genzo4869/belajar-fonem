@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Belajar Fonem dengan Ilustrasi B-C</title>
+<style>
+  body {
+    font-family: sans-serif;
+    font-size: 28px;
+    line-height: 2;
+    padding: 20px 40% 20px 70px; /* sisakan ruang kanan untuk ilustrasi */
+    color: darkblue;
+  }
+
+  /* agar spasi & enter di paragraf tetap terjaga */
+  p {
+    white-space: pre-wrap;
+  }
+
+  .popup {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+    margin: 0 4px;
+  }
+
+  .popup-img {
+    display: none;
+    width: 100px;
+    position: absolute;
+    top: -130px;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 2px solid #333;
+    border-radius: 8px;
+    background: #fff;
+    padding: 5px;
+    z-index: 10;
+  }
+
+  .popup-img img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  /* ilustrasi samping */
+  .ilustrasi {
+  float: right;           /* tempel di sisi kanan teks */
+  margin: 0 0 20px 20px;  /* beri jarak dari teks */
+  width: 120px;
+  border: 3px solid #444;
+  border-radius: 12px;
+  background: #fff;
+  padding: 5px;
+}
+
+  .ilustrasi img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 10px;
+  }
+
+  h2 {
+    margin-top: 50px;
+    margin-bottom: 10px;
+  }
+</style>
+</head>
+<body>
+
+<h2>BATA</h2>
+<div class="ilustrasi">
+  <img src="bata.jpg" alt="Ilustrasi Bata">
+</div>
+<p id="teks1">
+i ni      ba ta
+i tu      ba ta
+di      sa na      a da      ba ta
+di      si ni      ju ga     ba ta
+ba ta      da ri      ta na h
+ba ta      bu at      ru ma h
+</p>
+
+<h2>BATU</h2>
+<div class="ilustrasi">
+  <img src="batu.jpg" alt="Ilustrasi Batu">
+</div>
+<p id="teks2">
+i ni      ba tu
+ba tu      i tu      ke ra s
+ba tu      ke na      ka ca
+ka ca      bi sa      pe ca h
+ha ti ha ti      ma in      ba tu
+</p>
+
+<h2>BAJU</h2>
+<div class="ilustrasi">
+  <img src="baju.jpg" alt="Ilustrasi Baju">
+</div>
+<p id="teks3">
+i ni      ba ju
+ba ju      i ni      bi ru
+a ku      su ka
+i tu      ba ju      ba ru
+ba ru      be li      da ri      to ko
+be li      ba ju      de ngan      i bu
+</p>
+
+<h2>BOLA</h2>
+<div class="ilustrasi">
+  <img src="bola.jpg" alt="Ilustrasi Bola">
+</div>
+<p id="teks4">
+i ni      bo la
+bo la      i tu     bu la t
+a ku     ma u     ma in     bo la
+ma in     bo la     di sa na
+di     ha la ma n     ru ma h
+</p>
+
+<h2>CABE</h2>
+<div class="ilustrasi">
+  <img src="cabe.jpg" alt="Ilustrasi Cabe">
+</div>
+<p id="teks5">
+i ni     ca be
+ca be     i tu     pe da s
+a da     ca be     me ra h
+a da     ca be     hi ja u
+ha ti ha ti     ma ka n     ca be
+</p>
+
+<h2>CUKA</h2>
+<div class="ilustrasi">
+  <img src="cuka.jpg" alt="Ilustrasi Cuka">
+</div>
+<p id="teks6">
+i ni    cu ka
+cu ka     ba ru    be li
+cu ka     di     da pu r
+cu ka     di     ma ka n
+sa ma     mi     ja di     e na k
+</p>
+
+<script>
+  function aktifkanPopup(containerId) {
+    const container = document.getElementById(containerId);
+    const rawText = container.textContent;
+    const parts = rawText.split(/(\s+)/);
+
+    // Buat HTML tanpa newline agar inline tetap di satu baris
+    container.innerHTML = parts.map(part => {
+      if (/^\s+$/.test(part)) return part; // kembalikan spasi/newline apa adanya
+      const baseName = part.toLowerCase();
+      // CONCATENATE satu baris — tidak ada newline atau spasi ekstra di sini
+      return '<span class="popup" data-audio="' + baseName + '.mp3">' +
+               part +
+               '<span class="popup-img"><img src="' + baseName + '.jpg" alt="' + part + '"></span>' +
+             '</span>';
+    }).join('');
+
+    // Pasang event listener setelah innerHTML dibuat
+    container.querySelectorAll(".popup").forEach(p => {
+      p.addEventListener("click", e => {
+        e.stopPropagation();
+        // tutup semua popup lain
+        document.querySelectorAll(".popup-img").forEach(el => el.style.display = "none");
+        // tampilkan untuk yang diklik
+        const imgBox = p.querySelector(".popup-img");
+        imgBox.style.display = "block";
+        // mainkan audio kalau ada
+        const audioFile = p.dataset.audio;
+        const audio = new Audio(audioFile);
+        audio.play().catch(()=>{ /* kalau file audio tidak ada, abaikan */ });
+      });
+    });
+  }
+
+  // aktifkan untuk tiap paragraf
+  aktifkanPopup("teks1");
+  aktifkanPopup("teks2");
+  aktifkanPopup("teks3");
+  aktifkanPopup("teks4");
+  aktifkanPopup("teks5");
+  aktifkanPopup("teks6");
+
+  // klik luar menutup semua popup
+  document.addEventListener("click", () => {
+    document.querySelectorAll(".popup-img").forEach(el => el.style.display = "none");
+  });
+</script>
+
+</body>
+</html>
